@@ -1,57 +1,68 @@
 import TaskCard from "../components/TaskCard";
 import TodoModal from "../components/Modal";
 import { type TaskCardProps } from "../libs/Todolist";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function App() {
-  const [tasks, setTasks] = useState<TaskCardProps[]>([]);
 
-  const handleAdd = (newTask: TaskCardProps) => {
-    console.log("TODO handleAdd", newTask);
-  };
+const STORAGE_KEY = "lecture13.tasks";
 
-  const deleteTask = (taskId: string) => {
-    console.log("TODO deleteTask", taskId);
-  };
+function loadTasks(): TaskCardProps[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
 
-  const toggleDoneTask = (taskId: string) => {
-    console.log("TODO toggleDoneTask", taskId);
-  };
+export default function App() {
+
+  const [tasks, setTasks] = useState<TaskCardProps[]>(loadTasks);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks]);
+
+  const handleAdd = (newTask: TaskCardProps) => setTasks([...tasks, newTask]);
+
+  const deleteTask = (taskId: string) =>
+    setTasks(tasks.filter((t) => t.id !== taskId));
+
+  const toggleDoneTask = (taskId: string) =>
+    setTasks(
+      tasks.map((t) => (t.id === taskId ? { ...t, isDone: !t.isDone } : t)),
+    );
 
   return (
-    <div className="col-12 m-2 p-0">
-      <div className="container text-center">
-        <h2>Todo List</h2>
-        <span className="m-2">All : () Done : ()</span>
+    <div className="container text-center">
+      <h2>Todo List</h2>
+      <br/>
+      <span className="m-2 border rounded bg-primary text-white p-2"> ⫶☰ All : ({tasks.length}) </span>
+      <span className="m-2 border rounded bg-success text-white p-2"> ✅️ Done : ({tasks.filter((t) => t.isDone).length})</span>
+      <br/>
+      <button
+      className="btn btn-primary my-3"
+      data-bs-toggle="modal"
+      data-bs-target="#todoModal"
+      >
+      Add
+      </button>
+      
+      <TodoModal onAdd={handleAdd} />
 
-        <div>
-          <button
-            type="button"
-            className="btn btn-primary my-3"
-            data-bs-toggle="modal"
-            data-bs-target="#todoModal"
-          >
-            Add
-          </button>
-        </div>
-
-        <TodoModal onAdd={handleAdd} />
-        <>
-          {tasks.map((task) => (
-            <TaskCard
-              id={task.id}
-              title={task.title}
-              description={task.description}
-              deleteTaskFunc={deleteTask}
-              toggleDoneTaskFunc={toggleDoneTask}
-              isDone={task.isDone}
-              key={task.id}
-            />
-          ))}
-        </>
-      </div>
+      {tasks.map((task) => (
+        <TaskCard
+          key={task.id}
+          id={task.id}
+          title={task.title}
+          description={task.description}
+          isDone={task.isDone}
+          deleteTaskFunc={deleteTask}
+          toggleDoneTaskFunc={toggleDoneTask}
+        />
+      ))}
     </div>
   );
 }
 
-export default App;
+

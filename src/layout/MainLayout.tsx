@@ -8,19 +8,19 @@ export default function MainLayout() {
       <div className="row h-100">
         <div className="col-2 col-md-2 p-0">
           {/* Sidebar ซ้าย */}
-          <Sidebar userName="Who are you?" type="student" />
+          <Sidebar userName="Warintorn" type="student" />
         </div>
         <div className="col-10 col-md-10 p-0">
           {/* Header ด้านบน */}
           <Header />
-
+          
           {/* Main Content เนื้อหาหลัก */}
           <main className="flex-grow-1 p-4 min-vh-100">
             <Outlet />
           </main>
 
           {/* Footer ด้านล่าง */}
-          <Footer year="2026" fullName="ชื่อ-สกุล" studentId="รหัสนักศึกษา" />
+          <Footer year="2026" fullName="Warintorn Sriti" studentId="680610714" />
         </div>
       </div>
     </div>

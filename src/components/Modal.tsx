@@ -7,16 +7,31 @@ type props = {
 };
 
 export default function Modal({ onAdd }: props) {
+  // STEP 9 — 1 state ต่อ 1 ช่องกรอก
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (title.trim()) {
+      const newtodo: TaskCardProps = {
+        id: uuidv4(),
+        title,
+        description,
+        isDone: false,
+      };
+      onAdd(newtodo);
+      setTitle("");
+      setDescription("");
+    }
+  };
 
-  const titleOnchange = (event: any) => {
+  const titleOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const descriptionOnchang = (event: any) => {
+  const descriptionOnchange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setDescription(event.target.value);
   };
 
@@ -45,7 +60,7 @@ export default function Modal({ onAdd }: props) {
               className="form-control"
               placeholder="description..."
               value={description}
-              onChange={descriptionOnchang}
+              onChange={descriptionOnchange}
             ></textarea>
           </div>
           <div className="modal-footer">
@@ -60,7 +75,7 @@ export default function Modal({ onAdd }: props) {
             <button
               type="button"
               className="btn btn-success"
-              onClick={() => {}}
+              onClick={handleSubmit}
             >
               Save
             </button>
@@ -70,3 +85,4 @@ export default function Modal({ onAdd }: props) {
     </div>
   );
 }
+
