@@ -7,7 +7,7 @@ type props = {
 };
 
 export default function Modal({ onAdd }: props) {
-  // STEP 9 — 1 state ต่อ 1 ช่องกรอก
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -76,6 +76,7 @@ export default function Modal({ onAdd }: props) {
               type="button"
               className="btn btn-success"
               onClick={handleSubmit}
+              // data-bs-dismiss="modal" //กดเพิ่มtaskแล้วหน้าต่างปิดให้เอง
             >
               Save
             </button>
